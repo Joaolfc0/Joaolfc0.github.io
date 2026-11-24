@@ -51,13 +51,11 @@ header nav a[aria-current="page"]::after{transform:scaleX(1)}
 .menu-btn{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px;place-items:center;color:var(--ink)}
 
 main{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,3rem) 6rem}
-section[data-route]{display:none}
-section[data-route].active{display:block}
-section[data-route].home.active{display:grid}
+main > section + section{margin-top:3rem}
 
 /* ---------- home ---------- */
-.home{min-height:calc(100vh - 64px);grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:3rem;padding-bottom:4rem}
-.home h1{font-weight:500;font-size:clamp(2.6rem,5.4vw,4.4rem);line-height:1.04;letter-spacing:-.045em}
+.home{min-height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center;position:relative;padding-bottom:4rem}
+.home h1{font-weight:500;font-size:clamp(2.8rem,7vw,5.6rem);line-height:1.04;letter-spacing:-.045em}
 .home h1 span{display:block;overflow:hidden}
 .home h1 span i{display:block;font-style:normal;transform:translateY(105%);animation:up 1s var(--ease) forwards}
 .home h1 span:nth-child(2) i{animation-delay:.08s;color:var(--faint)}
@@ -71,25 +69,12 @@ section[data-route].home.active{display:grid}
 .status:hover{color:var(--accent-ink);background-size:100% 2px}
 @keyframes fade{to{opacity:1}}
 
-.index{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line);aspect-ratio:1/1;max-width:520px;justify-self:end;width:100%}
-.cell{position:relative;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;place-items:center;overflow:hidden;isolation:isolate}
-.cell::before{content:"";position:absolute;inset:0;background:var(--tint);opacity:0;transition:opacity .45s var(--ease);z-index:-1}
-.cell:hover::before,.cell:focus-visible::before{opacity:1}
-.cell:focus-visible{outline:none}
-.cell .name{position:absolute;left:1.1rem;bottom:.9rem;font-size:15px;font-weight:500;letter-spacing:-.01em}
-.cell .sub{position:absolute;right:1.1rem;top:.9rem;font-size:12.5px;color:var(--faint);transition:color .3s}
-.cell:hover .sub{color:var(--accent-ink)}
-.cell svg{width:46%;height:46%;overflow:visible}
-.cell .shape{fill:transparent;stroke:var(--ink);stroke-width:1.1;
-  stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s var(--ease) forwards;
-  transform-box:fill-box;transform-origin:center;transition:transform .7s var(--ease),fill .45s var(--ease),stroke .45s var(--ease)}
-.cell:nth-child(2) .shape{animation-delay:.12s}.cell:nth-child(3) .shape{animation-delay:.24s}.cell:nth-child(4) .shape{animation-delay:.36s}
-@keyframes draw{to{stroke-dashoffset:0}}
-.cell:hover .shape,.cell:focus-visible .shape{fill:var(--accent);stroke:var(--accent-ink)}
-.cell:hover .square,.cell:focus-visible .square{transform:rotate(45deg) scale(.82)}
-.cell:hover .circle,.cell:focus-visible .circle{transform:scale(.86)}
-.cell:hover .triangle,.cell:focus-visible .triangle{transform:rotate(180deg)}
-.cell:hover .quarter,.cell:focus-visible .quarter{transform:rotate(90deg)}
+.cue{position:absolute;left:0;bottom:2.5rem;display:flex;align-items:center;gap:.75rem;font-size:12.5px;color:var(--faint);opacity:0;animation:fade .9s 1.1s var(--ease) forwards}
+.cue i{width:1px;height:28px;background:var(--line);position:relative;overflow:hidden}
+.cue i::after{content:"";position:absolute;left:0;right:0;top:0;height:40%;background:var(--accent);animation:drip 2.2s var(--ease) infinite}
+@keyframes drip{from{transform:translateY(-100%)}to{transform:translateY(260%)}}
+.loop{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,3rem)}
+.loop .home{min-height:100vh}
 
 /* ---------- pages ---------- */
 .page-head{padding:5.5rem 0 3rem;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
@@ -185,13 +170,8 @@ input:focus,textarea:focus{outline:none;background:#fff;border-color:var(--accen
 
 footer{max-width:1120px;margin:0 auto;padding:2rem clamp(1.25rem,4vw,3rem);display:flex;justify-content:space-between;color:var(--faint);font-size:13px}
 
-::view-transition-old(root){animation:vo .25s var(--ease) both}
-::view-transition-new(root){animation:vi .5s var(--ease) both}
-@keyframes vo{to{opacity:0}}
-@keyframes vi{from{opacity:0;transform:translateY(8px)}}
 
 @media (max-width:860px){
-  .home{grid-template-columns:1fr;min-height:auto;padding-top:3.5rem;gap:2rem}
   .block,.pub,.proj{grid-template-columns:1fr;gap:.6rem}
   .proj .arrow{display:none}
   .skills div{grid-template-columns:1fr;gap:.1rem}
@@ -234,20 +214,7 @@ footer{max-width:1120px;margin:0 auto;padding:2rem clamp(1.25rem,4vw,3rem);displ
     <p class="intro">Software engineer in Porto, building backend systems and thinking about how they're architected.</p>
     <a class="status" href="#/contact">Open to backend roles</a>
   </div>
-  <nav class="index" aria-label="Sections">
-    <a class="cell" href="#/cv"><span class="sub">Experience</span>
-      <svg viewBox="0 0 100 100"><rect class="shape square" x="10" y="10" width="80" height="80" pathLength="1"/></svg>
-      <span class="name">CV</span></a>
-    <a class="cell" href="#/publications"><span class="sub">2 papers</span>
-      <svg viewBox="0 0 100 100"><circle class="shape circle" cx="50" cy="50" r="42" pathLength="1"/></svg>
-      <span class="name">Publications</span></a>
-    <a class="cell" href="#/projects"><span class="sub">3 builds</span>
-      <svg viewBox="0 0 100 100"><path class="shape triangle" d="M50 8 L94 88 L6 88 Z" pathLength="1"/></svg>
-      <span class="name">Projects</span></a>
-    <a class="cell" href="#/contact"><span class="sub">Say hello</span>
-      <svg viewBox="0 0 100 100"><path class="shape quarter" d="M10 90 L10 10 A80 80 0 0 1 90 90 Z" pathLength="1"/></svg>
-      <span class="name">Contact</span></a>
-  </nav>
+  <div class="cue" aria-hidden="true"><i></i>Scroll</div>
 </section>
 
 <!-- CV -->
@@ -386,6 +353,7 @@ footer{max-width:1120px;margin:0 auto;padding:2rem clamp(1.25rem,4vw,3rem);displ
 </main>
 
 <footer><span>© 2026 João Luiz Cerqueira</span><span>Porto</span></footer>
+<div class="loop" id="loop" aria-hidden="true" inert></div>
 
 <script>
 (() => {
@@ -407,32 +375,51 @@ document.getElementById('projects').innerHTML = projects.map(p=>`
     <span class="arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg></span>
   </a>`).join('');
 
-/* router */
+/* one continuous page: scrolling moves through the sections and loops back to the start */
 const sections=[...document.querySelectorAll('section[data-route]')];
 const links=[...document.querySelectorAll('header nav a')];
 const nav=document.querySelector('header nav'), menuBtn=document.querySelector('.menu-btn'), header=document.querySelector('header');
-const routes=['','cv','publications','projects','contact'];
-let io;
-function render(){
-  const r=location.hash.replace(/^#\/?/,''); const key=routes.includes(r)?r:'';
-  sections.forEach(s=>s.classList.toggle('active',s.dataset.route===key));
+const home=sections[0], loop=document.getElementById('loop');
+const clone=home.cloneNode(true); clone.removeAttribute('data-route'); loop.appendChild(clone);
+const HEAD=64;
+const topOf=el=>el.getBoundingClientRect().top+scrollY;
+const target=key=>{const s=sections.find(x=>x.dataset.route===key)||home; return s===home?0:topOf(s)-HEAD};
+function go(key,smooth=true){
+  scrollTo({top:target(key),behavior:smooth&&!reduce?'smooth':'instant'});
+  nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#/"]'); if(!a) return;
+  e.preventDefault(); go(a.getAttribute('href').slice(2));
+});
+addEventListener('hashchange',()=>go(location.hash.replace(/^#\/?/,'')));
+menuBtn.addEventListener('click',()=>{const o=nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o)});
+
+let current=null;
+function spy(){
+  const line=innerHeight*.4;
+  let key='';
+  for(const s of sections) if(s.getBoundingClientRect().top<=line) key=s.dataset.route;
+  if(clone.getBoundingClientRect().top<=line) key='';
+  if(key===current) return; current=key;
   links.forEach(a=>a.dataset.to===key?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
   document.title = key ? `${links.find(a=>a.dataset.to===key).textContent}, João Luiz Cerqueira` : 'João Luiz Cerqueira';
-  window.scrollTo({top:0,behavior:'instant'});
-  nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');
-  observe(); rail();
+  history.replaceState(null,'',key?'#/'+key:location.pathname+location.search);
 }
-addEventListener('hashchange',()=> (document.startViewTransition&&!reduce)?document.startViewTransition(render):render());
-menuBtn.addEventListener('click',()=>{const o=nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o)});
-addEventListener('scroll',()=>{header.classList.toggle('scrolled',scrollY>8);rail()},{passive:true});
+/* when the copy of the home screen reaches the top, jump back to the real one: same picture, no seam */
+function wrap(){
+  const delta=topOf(clone)-topOf(home);
+  if(scrollY>=delta-1) scrollTo({top:scrollY-delta,behavior:'instant'});
+}
+addEventListener('scroll',()=>{wrap();header.classList.toggle('scrolled',scrollY>8);rail();spy()},{passive:true});
 
-function observe(){
-  io&&io.disconnect();
-  io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
-  document.querySelectorAll('section.active .reveal:not(.in)').forEach((el,i)=>{el.style.transitionDelay=Math.min(i*60,300)+'ms';io.observe(el)});
-}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('main .reveal').forEach(el=>{
+  const i=[...el.parentElement.children].filter(c=>c.classList.contains('reveal')).indexOf(el);
+  el.style.transitionDelay=Math.min(i*60,300)+'ms'; io.observe(el);
+});
 const tl=document.getElementById('timeline');
-function rail(){ if(!tl.offsetParent) return; const r=tl.getBoundingClientRect(); tl.style.setProperty('--p',Math.min(1,Math.max(0,(innerHeight*.75-r.top)/r.height))); }
+function rail(){ const r=tl.getBoundingClientRect(); tl.style.setProperty('--p',Math.min(1,Math.max(0,(innerHeight*.75-r.top)/r.height))); }
 
 /* contact */
 const copy=document.getElementById('copy');
@@ -459,7 +446,10 @@ form.addEventListener('submit',async e=>{
   }finally{ btn.disabled=false; btn.textContent='Send message'; }
 });
 
-render();
+history.scrollRestoration='manual';
+const first=location.hash.replace(/^#\/?/,'');
+if(first) requestAnimationFrame(()=>go(first,false));
+spy(); rail();
 })();
 </script>
 </body>
